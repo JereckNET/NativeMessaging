@@ -4,11 +4,13 @@ using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace NativeMessaging {
+namespace NativeMessaging
+{
     /// <summary>
-    /// Abstract class that should be extended to communicate with Chrome
+    /// Abstract class that should be extended to communicate with browsers
     /// </summary>
-    public abstract class Host {
+    public abstract class Host
+    {
         private readonly bool SendConfirmationReceipt;
         private readonly string ManifestPath;
 
@@ -18,15 +20,16 @@ namespace NativeMessaging {
         public abstract string Hostname { get; }
 
         /// <summary>
-        /// List of supported chromium Browsers.
+        /// List of supported Chromium browsers.
         /// </summary>
         public List<ChromiumBrowser> SupportedBrowsers { get; }
 
         /// <summary>
-        /// Creates the Host Object
+        /// Creates the Host object
         /// </summary>
         /// <param name="sendConfirmationReceipt"><see langword="true" /> for the host to automatically send message confirmation receipt.</param>
-        public Host(bool sendConfirmationReceipt = true) {
+        public Host(bool sendConfirmationReceipt = true)
+        {
             SupportedBrowsers = new List<ChromiumBrowser>(2);
 
             SendConfirmationReceipt = sendConfirmationReceipt;
@@ -36,12 +39,14 @@ namespace NativeMessaging {
         /// <summary>
         /// Starts listening for input.
         /// </summary>
-        public void Listen() {
+        public void Listen()
+        {
             if (!IsRegistered())
                 throw new NotRegisteredWithBrowserException(Hostname);
 
             JObject data;
-            while ((data = Read()) != null) {
+            while ((data = Read()) != null)
+            {
                 Log.LogMessage("Data Received:" + JsonConvert.SerializeObject(data));
 
                 if (SendConfirmationReceipt)
@@ -50,7 +55,8 @@ namespace NativeMessaging {
             }
         }
 
-        private JObject Read() {
+        private JObject Read()
+        {
             Log.LogMessage("Waiting for Data");
 
             Stream stdin = Console.OpenStandardInput();
@@ -71,7 +77,8 @@ namespace NativeMessaging {
         /// Sends a message to Chrome, note that the message might not be able to reach Chrome if the stdIn / stdOut aren't properly configured (i.e. Process needs to be started by Chrome)
         /// </summary>
         /// <param name="data">A <see cref="JObject"/> containing the data to be sent.</param>
-        public void SendMessage(JObject data) {
+        public void SendMessage(JObject data)
+        {
             Log.LogMessage("Sending Message:" + JsonConvert.SerializeObject(data));
 
             byte[] bytes = System.Text.Encoding.UTF8.GetBytes(data.ToString(Formatting.None));
@@ -97,10 +104,14 @@ namespace NativeMessaging {
         /// <param name="description">Short application description to be included in the manifest.</param>
         /// <param name="allowedOrigins">List of extensions that should have access to the native messaging host.<br />Wildcards such as <code>chrome-extension://*/*</code> are not allowed.</param>
         /// <param name="overwrite">Determines if the manifest should be overwritten if it already exists.<br />Defaults to <see langword="false"/>.</param>
-        public void GenerateManifest(string description, string[] allowedOrigins, bool overwrite = false) {
-            if (File.Exists(ManifestPath) && !overwrite) {
+        public void GenerateManifest(string description, string[] allowedOrigins, bool overwrite = false)
+        {
+            if (File.Exists(ManifestPath) && !overwrite)
+            {
                 Log.LogMessage("Manifest exists already");
-            } else {
+            }
+            else
+            {
                 Log.LogMessage("Generating Manifest");
 
                 string manifest = JsonConvert.SerializeObject(new Manifest(Hostname, description, Utils.AssemblyExecuteablePath(), allowedOrigins));
@@ -113,8 +124,10 @@ namespace NativeMessaging {
         /// <summary>
         /// Removes the manifest from application folder
         /// </summary>
-        public void RemoveManifest() {
-            if (File.Exists(ManifestPath)) {
+        public void RemoveManifest()
+        {
+            if (File.Exists(ManifestPath))
+            {
                 File.Delete(ManifestPath);
             }
         }
@@ -125,10 +138,12 @@ namespace NativeMessaging {
         /// Checks if the host is registered with all required browsers.
         /// </summary>
         /// <returns><see langword="true"/> if the required information is present in the registry.</returns>
-        public bool IsRegistered() {
+        public bool IsRegistered()
+        {
             bool result = false;
 
-            foreach (ChromiumBrowser browser in SupportedBrowsers) {
+            foreach (ChromiumBrowser browser in SupportedBrowsers)
+            {
                 result = result || browser.IsRegistered(Hostname, ManifestPath);
             }
 
@@ -138,8 +153,10 @@ namespace NativeMessaging {
         /// <summary>
         /// Register the application to open with all required browsers.
         /// </summary>
-        public void Register() {
-            foreach (ChromiumBrowser browser in SupportedBrowsers) {
+        public void Register()
+        {
+            foreach (ChromiumBrowser browser in SupportedBrowsers)
+            {
                 browser.Register(Hostname, ManifestPath);
             }
         }
@@ -147,8 +164,10 @@ namespace NativeMessaging {
         /// <summary>
         /// De-register the application to open with all required browsers.
         /// </summary>
-        public void Unregister() {
-            foreach (ChromiumBrowser browser in SupportedBrowsers) {
+        public void Unregister()
+        {
+            foreach (ChromiumBrowser browser in SupportedBrowsers)
+            {
                 browser.Unregister(Hostname);
             }
         }

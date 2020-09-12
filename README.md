@@ -1,7 +1,9 @@
 # NativeMessaging
 C# Chome Native Messaging Library
 
-Can be used to receive data from or talk to a Chrome extension.
+Can be used to receive data from or talk to a Chrome, Edge or any other Chromium based browser extension.
+
+https://www.nuget.org/packages/NativeMessaging/#
 
 This can currently be used with the example app provided here: https://chromium.googlesource.com/chromium/src/+/master/chrome/common/extensions/docs/examples/api/nativeMessaging
 
@@ -75,3 +77,8 @@ class Program
         }
     }
 ```
+
+## Troubleshooting
+If your're having trouble connecting from Chrome try launching chrome with ```--enable-logging``` flag as detailed in [Debugging native messaging](https://developer.chrome.com/apps/nativeMessaging#native-messaging-debugging).
+
+It also recommeneded to try compiling in Release mode if you're encountering issues.

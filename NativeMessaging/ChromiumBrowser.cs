@@ -1,16 +1,19 @@
 ﻿using Microsoft.Win32;
 
-namespace NativeMessaging {
+namespace NativeMessaging
+{
     /// <summary>
     /// Represent any browser derived from Google's Chromium.
     /// </summary>
-    public partial class ChromiumBrowser {
+    public partial class ChromiumBrowser
+    {
         private readonly string regHostnameKeyLocation;
 
         /// <summary>
         /// The name of the browser application.
         /// </summary>
-        public string BrowserName {
+        public string BrowserName
+        {
             get;
             private set;
         }
@@ -20,7 +23,8 @@ namespace NativeMessaging {
         /// </summary>
         /// <param name="browserName">The name of the browser application.</param>
         /// <param name="RegKeyBaseLocation">Base location for the browser settigns in the Windows Registry.</param>
-        public ChromiumBrowser(string browserName, string RegKeyBaseLocation) {
+        public ChromiumBrowser(string browserName, string RegKeyBaseLocation)
+        {
             BrowserName = browserName;
             regHostnameKeyLocation = RegKeyBaseLocation + "\\NativeMessagingHosts\\";
         }
@@ -31,7 +35,8 @@ namespace NativeMessaging {
         /// <param name="ManifestPath">Path to the Native Messaging Host manifest file</param>
         /// <param name="Hostname">The hostname for the Native Messaging Host application</param>
         /// <returns><see langword="true"/> if the required information is present in the registry.</returns>
-        public bool IsRegistered(string Hostname, string ManifestPath) {
+        public bool IsRegistered(string Hostname, string ManifestPath)
+        {
             string targetKeyPath = regHostnameKeyLocation + Hostname;
 
             RegistryKey regKey = Registry.CurrentUser.OpenSubKey(targetKeyPath, true);
@@ -47,7 +52,8 @@ namespace NativeMessaging {
         /// </summary>
         /// <param name="Hostname">The hostname for the Native Messaging Host application</param>
         /// <param name="ManifestPath">Path to the Native Messaging Host manifest file</param>
-        public void Register(string Hostname, string ManifestPath) { 
+        public void Register(string Hostname, string ManifestPath)
+        {
             string targetKeyPath = regHostnameKeyLocation + Hostname;
 
             RegistryKey regKey = Registry.CurrentUser.OpenSubKey(targetKeyPath, true);
@@ -66,7 +72,8 @@ namespace NativeMessaging {
         /// De-register the application to open with the browser.
         /// </summary>
         /// <param name="Hostname">The hostname for the Native Messaging Host application</param>
-        public void Unregister(string Hostname) {
+        public void Unregister(string Hostname)
+        {
             string targetKeyPath = regHostnameKeyLocation + Hostname;
 
             RegistryKey regKey = Registry.CurrentUser.OpenSubKey(targetKeyPath, true);
@@ -78,7 +85,8 @@ namespace NativeMessaging {
         }
 
         /// <inheritdoc />
-        public override string ToString() {
+        public override string ToString()
+        {
             return BrowserName;
         }
     }

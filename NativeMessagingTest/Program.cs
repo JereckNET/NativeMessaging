@@ -1,26 +1,34 @@
-﻿using System.Linq;
 using NativeMessaging;
+using System.Linq;
 
-namespace NativeMessagingTest {
-    class Program {
+namespace NativeMessagingTest
+{
+    class Program
+    {
         static Host Host;
 
-        static string[] AllowedOrigins = new string[] { "chrome-extension://knldjmfmopnpolahpmmgbagdohdnhkik/" };
-        static string Description = "Alex Newton Levey Native Messaging Example Host";
+        readonly static string[] AllowedOrigins = new string[] { "chrome-extension://knldjmfmopnpolahpmmgbagdohdnhkik/" };
+        readonly static string Description = "Alexander Newton Levey Native Messaging Example Host";
 
-        static void Main(string[] args) {
+        static void Main(string[] args)
+        {
             Log.Active = true;
 
             Host = new MyHost();
             Host.SupportedBrowsers.Add(ChromiumBrowser.GoogleChrome);
             Host.SupportedBrowsers.Add(ChromiumBrowser.MicrosoftEdge);
 
-            if (args.Contains("--register")) {
+            if (args.Contains("--register"))
+            {
                 Host.GenerateManifest(Description, AllowedOrigins);
                 Host.Register();
-            } else if (args.Contains("--unregister")) {
+            }
+            else if (args.Contains("--unregister"))
+            {
                 Host.Unregister();
-            } else {
+            }
+            else
+            {
                 Host.Listen();
             }
         }
